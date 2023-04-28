@@ -5,7 +5,7 @@ namespace app\controllers;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class ProdutoController 
+class ProdutoController extends BaseController
 {
     public function index(Request $request, Response $response): Response 
     {
@@ -13,16 +13,9 @@ class ProdutoController
             '1' => 'Teclado',
             '2' => 'Mouse',
             '3' => 'Monitor'
-        ];
-
-        $result = [
-            'success' => true,
-            'message' => 'Listado com sucesso!',
-            'data' => $produtos
-        ];
-
-        $response->getBody()->write(json_encode($result));
-        return $response->withHeader('Content-type', 'application/json');       
+        ];        
+        
+        return $this->ok($response, "Listado com sucesso!", $produtos);
     }
 
     public function show(Request $request, Response $response, array $args): Response 
@@ -34,58 +27,33 @@ class ProdutoController
         ];
         
         $id = $args['id'];
-        $produto[$id] = $produtos[$id];
+        $produto[$id] = $produtos[$id];        
 
-        $result = [
-            'success' => true,
-            'message' => 'Exibido com sucesso!',
-            'data' => $produto
-        ];
-    
-        $response->getBody()->write(json_encode($result));
-        return $response->withHeader('Content-type', 'application/json');
+        return $this->ok($response, "Produto id={$id} exibido com sucesso!", $produto);
     }
 
     public function save(Request $request, Response $response): Response 
     {     
         $data = $request->getParsedBody();
-        $nome = $data["nome"] ?? "teste";
+        $nome = $data["nome"] ?? "teste";       
 
-        $result = [
-            'success' => true,
-            'message' => 'Produto adicionado com sucesso!',
-            'data' => $nome
-        ];
-    
-        $response->getBody()->write(json_encode($result));          
-        return $response->withStatus(201);    
+        return $this->created($response, "Produto adicionado com sucesso!", $nome);
     }
 
     public function update(Request $request, Response $response, array $args): Response 
     {            
-        $id = $args['id'];   
+        $id = $args['id'];  
+        
+        $data = $request->getParsedBody();
+        $nome = $data["nome"] ?? "teste";
 
-        $result = [
-            'success' => true,
-            'message' => "Produto com id={$id} editado com sucesso!",
-            'data' => $id
-        ];
-    
-        $response->getBody()->write(json_encode($result));          
-        return $response;
+        return $this->ok($response, "Produto com id={$id} editado com sucesso!", $nome);
     }
 
     public function delete(Request $request, Response $response, array $args): Response 
     {            
-        $id = $args['id'];  
-        
-        $result = [
-            'success' => true,
-            'message' => "Produto com id={$id} excluido com sucesso!",
-            'data' => $id
-        ];
-    
-        $response->getBody()->write(json_encode($result));          
-        return $response;
+        $id = $args['id'];          
+
+        return $this->ok($response, "Produto com id={$id} excluido com sucesso!", $id);
     }
 }
