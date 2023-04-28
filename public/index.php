@@ -12,7 +12,7 @@ $app = AppFactory::create();
 $app->addErrorMiddleware(true, true, true);
 
 // Definindo o caminho base 
-//$app->setBasePath('/aula-slim');
+$app->setBasePath('/aula-slim');
 
 // Rota default
 $app->get('/', [HomeController::class, 'index']);
