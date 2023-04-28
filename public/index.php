@@ -19,5 +19,9 @@ $app->get('/', [HomeController::class, 'index']);
 
 // Rotas Produtos
 $app->get('/produtos', [ProdutoController::class, 'index']);
+$app->get('/produtos/{id}', [ProdutoController::class, 'show']);
+$app->post('/produtos', [ProdutoController::class, 'save']);
+$app->put('/produtos/{id}', [ProdutoController::class, 'update']);
+$app->delete('/produtos/{id}', [ProdutoController::class, 'delete']);
 
 $app->run();
