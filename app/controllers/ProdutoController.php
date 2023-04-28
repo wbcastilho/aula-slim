@@ -15,7 +15,13 @@ class ProdutoController
             '3' => 'Monitor'
         ];
 
-        $response->getBody()->write(json_encode($produtos));
+        $result = [
+            'success' => true,
+            'message' => 'Listado com sucesso!',
+            'data' => $produtos
+        ];
+
+        $response->getBody()->write(json_encode($result));
         return $response->withHeader('Content-type', 'application/json');       
     }
 
@@ -29,8 +35,14 @@ class ProdutoController
         
         $id = $args['id'];
         $produto[$id] = $produtos[$id];
+
+        $result = [
+            'success' => true,
+            'message' => 'Exibido com sucesso!',
+            'data' => $produto
+        ];
     
-        $response->getBody()->write(json_encode($produto));
+        $response->getBody()->write(json_encode($result));
         return $response->withHeader('Content-type', 'application/json');
     }
 
@@ -38,24 +50,42 @@ class ProdutoController
     {     
         $data = $request->getParsedBody();
         $nome = $data["nome"] ?? "teste";
+
+        $result = [
+            'success' => true,
+            'message' => 'Produto adicionado com sucesso!',
+            'data' => $nome
+        ];
     
-        $response->getBody()->write("Adicionar Produto {$nome}");          
-        return $response;    
+        $response->getBody()->write(json_encode($result));          
+        return $response->withStatus(201);    
     }
 
     public function update(Request $request, Response $response, array $args): Response 
     {            
         $id = $args['id'];   
+
+        $result = [
+            'success' => true,
+            'message' => "Produto com id={$id} editado com sucesso!",
+            'data' => $id
+        ];
     
-        $response->getBody()->write("Editar Produto com id={$id}");          
+        $response->getBody()->write(json_encode($result));          
         return $response;
     }
 
     public function delete(Request $request, Response $response, array $args): Response 
     {            
-        $id = $args['id'];   
+        $id = $args['id'];  
+        
+        $result = [
+            'success' => true,
+            'message' => "Produto com id={$id} excluido com sucesso!",
+            'data' => $id
+        ];
     
-        $response->getBody()->write("Deletar Produto com id={$id}");          
+        $response->getBody()->write(json_encode($result));          
         return $response;
     }
 }
