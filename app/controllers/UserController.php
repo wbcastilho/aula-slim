@@ -81,6 +81,7 @@ class UserController extends BaseController
         $id = $args['id'];   
         
         $user = $this->entityManager->find(User::class, $id);
+        $result = $user->toArray();
 
         if ($user !== null) {
             $this->entityManager->remove($user);
@@ -90,6 +91,6 @@ class UserController extends BaseController
             $message = "User {$id} não existe."; 
         }
 
-        return $this->ok($response, $message, $id);
+        return $this->ok($response, $message, $result);
     }
 }
