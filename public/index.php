@@ -2,6 +2,7 @@
 
 namespace public;
 
+use Symfony\Component\Dotenv\Dotenv;
 use DI\Container;
 use Slim\Factory\AppFactory;
 use app\controllers\HomeController;
@@ -12,18 +13,21 @@ use Doctrine\ORM\ORMSetup;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__.'/../.env');
+
 // Create Container using PHP-DI
 $container = new Container();
 
 $container->set(EntityManager::class, fn() => EntityManager::create(
     [
-        'driver' => 'pdo_mysql',
-        'host' => '127.0.0.1',
-        'port' => 3306,
-        'dbname' => 'doctrine_exemplo',
-        'user' => 'root',
-        'password' => '',
-        'charset' => 'utf8mb4'
+        'driver' => $_ENV['DB_DRIVER'],
+        'host' => $_ENV['DB_HOST'],
+        'port' => $_ENV['DB_PORT'],
+        'dbname' => $_ENV['DB_DATABASE'],
+        'user' => $_ENV['DB_USERNAME'],
+        'password' => $_ENV['DB_PASSWORD'],
+        'charset' => $_ENV['DB_CHARSET']
     ],
     ORMSetup::createAnnotationMetadataConfiguration(
         paths: array(__DIR__."/app/entity"),
@@ -40,7 +44,11 @@ $app = AppFactory::create();
 $app->addBodyParsingMiddleware();
 
 // Mensagens de erro em modo debug
-$app->addErrorMiddleware(true, true, true);
+$app->addErrorMiddleware(
+    $_ENV['DISPLAY_ERROR_DETAILS'],
+    $_ENV['LOG_ERRORS'],
+    $_ENV['LOG_ERROR_DETAILS']
+);
 
 // Definindo o caminho base 
 $app->setBasePath('/aula-slim');

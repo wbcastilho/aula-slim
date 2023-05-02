@@ -17,6 +17,7 @@
         "doctrine/orm": "^2.14",
         "symfony/cache": "^6.2",
         "doctrine/annotations": "^2.0",
-        "php-di/php-di": "^7.0"
+        "php-di/php-di": "^7.0",
+        "symfony/dotenv": "^6.2"
     }
 }
