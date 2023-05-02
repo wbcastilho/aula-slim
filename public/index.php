@@ -5,9 +5,6 @@ namespace public;
 use Symfony\Component\Dotenv\Dotenv;
 use DI\Container;
 use Slim\Factory\AppFactory;
-use app\controllers\HomeController;
-use app\controllers\ProdutoController;
-use app\controllers\UserController;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 
