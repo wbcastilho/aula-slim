@@ -22,3 +22,7 @@ $app->get('/users/{id}', [UserController::class, 'show']);
 $app->post('/users', [UserController::class, 'save']);
 $app->put('/users/{id}', [UserController::class, 'update']);
 $app->delete('/users/{id}', [UserController::class, 'delete']);
+
+// Teste Querybuilder
+$app->get('/teste', [UserController::class, 'teste']);
+$app->get('/teste2', [UserController::class, 'teste2']);

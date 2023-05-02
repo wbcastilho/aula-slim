@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\EntityManager;
 use app\entity\User;
 
@@ -92,5 +93,34 @@ class UserController extends BaseController
         }
 
         return $this->ok($response, $message, $result);
+    }
+
+    public function teste(Request $request, Response $response): Response 
+    {               
+        $qb = $this->entityManager->createQueryBuilder();                
+
+        $qb->select('u')
+        ->from(User::class, 'u') 
+        ->orderBy('u.name', 'ASC');
+
+        $resultado = $qb->getQuery()->getResult();
+       
+        echo "<pre>";
+        print_r($resultado);
+        exit();
+        
+        return $this->ok($response, "Listado Usuários", $listUser);
+    }
+
+    public function teste2(Request $request, Response $response): Response 
+    {                      
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('id', 'id');
+        $rsm->addScalarResult('name', 'name');
+
+        $query = $this->entityManager->createNativeQuery('SELECT id, name FROM users', $rsm);               
+        $users = $query->getResult();               
+        
+        return $this->ok($response, "Listado Usuários", $users);
     }
 }
