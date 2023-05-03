@@ -4,9 +4,12 @@ namespace public;
 
 use Symfony\Component\Dotenv\Dotenv;
 use DI\Container;
+use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use Doctrine\DBAL\DriverManager;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -14,23 +17,59 @@ $dotenv = new Dotenv();
 $dotenv->load(__DIR__.'/../.env');
 
 // Create Container using PHP-DI
-$container = new Container();
+// $container = new Container();
 
-$container->set(EntityManager::class, fn() => EntityManager::create(
-    [
-        'driver' => $_ENV['DB_DRIVER'],
-        'host' => $_ENV['DB_HOST'],
-        'port' => $_ENV['DB_PORT'],
-        'dbname' => $_ENV['DB_DATABASE'],
-        'user' => $_ENV['DB_USERNAME'],
-        'password' => $_ENV['DB_PASSWORD'],
-        'charset' => $_ENV['DB_CHARSET']
-    ],
-    ORMSetup::createAnnotationMetadataConfiguration(
-        paths: array(__DIR__."/app/entity"),
-        isDevMode: true,
-    )
-));
+// $container->set(EntityManager::class, fn() => EntityManager::create(
+//     [
+//         'driver' => $_ENV['DB_DRIVER'],
+//         'host' => $_ENV['DB_HOST'],
+//         'port' => $_ENV['DB_PORT'],
+//         'dbname' => $_ENV['DB_DATABASE'],
+//         'user' => $_ENV['DB_USERNAME'],
+//         'password' => $_ENV['DB_PASSWORD'],
+//         'charset' => $_ENV['DB_CHARSET']
+//     ],
+//     ORMSetup::createAnnotationMetadataConfiguration(
+//         paths: array(__DIR__."/app/entity"),
+//         isDevMode: true,
+//     )
+// ));
+
+
+// Crie o contêiner PHP-DI
+$containerBuilder = new ContainerBuilder();
+$containerBuilder->addDefinitions([
+    Connection::class => function () {
+        $connectionParams = [
+            'driver' => $_ENV['DB_DRIVER'],
+            'host' => $_ENV['DB_HOST'],
+            'port' => $_ENV['DB_PORT'],
+            'dbname' => $_ENV['DB_DATABASE'],
+            'user' => $_ENV['DB_USERNAME'],
+            'password' => $_ENV['DB_PASSWORD'],
+            'charset' => $_ENV['DB_CHARSET']
+        ];
+        return DriverManager::getConnection($connectionParams);
+    },
+    EntityManager::class => fn() => EntityManager::create(
+        [
+            'driver' => $_ENV['DB_DRIVER'],
+            'host' => $_ENV['DB_HOST'],
+            'port' => $_ENV['DB_PORT'],
+            'dbname' => $_ENV['DB_DATABASE'],
+            'user' => $_ENV['DB_USERNAME'],
+            'password' => $_ENV['DB_PASSWORD'],
+            'charset' => $_ENV['DB_CHARSET']
+        ],
+        ORMSetup::createAnnotationMetadataConfiguration(
+            paths: array(__DIR__."/app/entity"),
+            isDevMode: true,
+        )
+    )    
+]);
+
+// Construa o contêiner
+$container = $containerBuilder->build();
 
 // Set container to create App with on AppFactory
 AppFactory::setContainer($container);

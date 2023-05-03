@@ -5,6 +5,7 @@ namespace app\routes;
 use app\controllers\HomeController;
 use app\controllers\ProdutoController;
 use app\controllers\UserController;
+use app\controllers\TesteController;
 
 // Rota default
 $app->get('/', [HomeController::class, 'index']);
@@ -24,5 +25,7 @@ $app->put('/users/{id}', [UserController::class, 'update']);
 $app->delete('/users/{id}', [UserController::class, 'delete']);
 
 // Teste Querybuilder
-$app->get('/teste', [UserController::class, 'teste']);
+//$app->get('/teste', [UserController::class, 'teste']);
 $app->get('/teste2', [UserController::class, 'teste2']);
+
+$app->get('/teste', [TesteController::class, 'getUsers']);
