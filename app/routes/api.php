@@ -24,8 +24,11 @@ $app->post('/users', [UserController::class, 'save']);
 $app->put('/users/{id}', [UserController::class, 'update']);
 $app->delete('/users/{id}', [UserController::class, 'delete']);
 
-// Teste Querybuilder
+// Teste Querybuilder no Doctrine ORM
 //$app->get('/teste', [UserController::class, 'teste']);
-$app->get('/teste2', [UserController::class, 'teste2']);
+//$app->get('/teste2', [UserController::class, 'teste2']);
 
-$app->get('/teste', [TesteController::class, 'getUsers']);
+// Testes no Doctrine DBAL
+$app->get('/testes', [TesteController::class, 'index']);
+$app->get('/testes/{id}', [TesteController::class, 'show']);
+$app->post('/testes', [TesteController::class, 'save']);

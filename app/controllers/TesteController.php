@@ -15,15 +15,53 @@ class TesteController extends BaseController
         $this->db = $db;
     }
 
-    public function getUsers(Request $request, Response $response, $args)
+    public function index(Request $request, Response $response, $args)
     {        
-        $qb = $this->db->createQueryBuilder();
+        $queryBuilder = $this->db->createQueryBuilder();
 
-        $qb->select('*')->from('users');
+        $queryBuilder->select('*')->from('users');
 
-        $stmt = $qb->execute();
+        $stmt = $queryBuilder->execute();
         $users = $stmt->fetchAll();
 
-        return $this->ok($response, "Listado Usuários", $users);        
+        return $this->ok($response, "Listado Usuários com DBAL", $users);        
+    }
+
+    public function show(Request $request, Response $response, array $args): Response 
+    {           
+        $id = $args['id'];
+        
+        $queryBuilder = $this->db->createQueryBuilder();
+       
+        $queryBuilder
+            ->select('id', 'name')
+            ->from('users')
+            ->where('id = ?')
+            ->setParameter(0, $id);
+
+        $user = $queryBuilder->execute()->fetchAllAssociative();
+
+        // echo "<pre>";
+        // print_r($user);
+        // exit();
+
+        return $this->ok($response, "Usuário id={$id} exibido com sucesso com DBAL!", $user);
+    }
+
+    public function save(Request $request, Response $response): Response
+    {
+        $data = $request->getParsedBody();
+        $name = $data["name"] ?? "";    
+
+        $queryBuilder = $this->db->createQueryBuilder();
+
+        $queryBuilder
+            ->insert('users')
+            ->setValue('name', ':name')           
+            ->setParameter(':name', $name);   
+            
+        $queryBuilder->execute();
+        
+        return $this->ok($response, "Usuário adicionado com sucesso com DBAL!", $name);
     }
 }

@@ -39,6 +39,7 @@ $dotenv->load(__DIR__.'/../.env');
 // Crie o contêiner PHP-DI
 $containerBuilder = new ContainerBuilder();
 
+// Definições das classes que será adicionadas no container builder
 $containerBuilder->addDefinitions([
     Connection::class => function () {
         $connectionParams = [

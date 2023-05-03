@@ -20,25 +20,33 @@ class UserController extends BaseController
     public function index(Request $request, Response $response): Response 
     {               
         $userRepository = $this->entityManager->getRepository(User::class);
-        $users = $userRepository->findAll(); 
+        $userObj = $userRepository->findAll(); 
 
-        $listUser = array_map(function($obj) {
+        $users = array_map(function($obj) {
             return array(
                 'id' => $obj->getId(),
                 'name' => $obj->getName()
             );
-        }, $users);            
+        }, $userObj);            
         
-        return $this->ok($response, "Listado Usuários", $listUser);
+        return $this->ok($response, "Listado Usuários", $users);
     }
 
     public function show(Request $request, Response $response, array $args): Response 
     {           
         $id = $args['id'];
        
-        $user = $this->entityManager->find(User::class, (int)$id);
+        $userObj = $this->entityManager->find(User::class, (int)$id);
+        $user = [];
 
-        return $this->ok($response, "Usuário id={$id} exibido com sucesso!", $user->toArray());
+        if (is_null($userObj)) {
+            $message = "O usuário selecionado não existe";            
+        } else {
+            $message = "Usuário id={$id} exibido com sucesso!";
+            $user = $userObj->toArray();
+        }
+
+        return $this->ok($response, $message, $user);
     }
 
     public function save(Request $request, Response $response): Response
@@ -63,17 +71,19 @@ class UserController extends BaseController
         $data = $request->getParsedBody();
         $name = $data["name"] ?? "";
       
-        $user = $this->entityManager->find(User::class, $id);
+        $userObj = $this->entityManager->find(User::class, $id);
+        $user = [];
        
-        if ($user !== null) {                       
-            $user->setName($name);
+        if ($userObj !== null) {                       
+            $userObj->setName($name);
             $this->entityManager->flush();
+            $user = $userObj->toArray();
             $message = "Usuário com id={$id} editado com sucesso!";
         } else {
             $message = "User {$id} não existe."; 
         }
        
-        return $this->ok($response, $message, $user->toArray());
+        return $this->ok($response, $message, $user);
     }
 
     public function delete(Request $request, Response $response, array $args): Response 
@@ -81,18 +91,19 @@ class UserController extends BaseController
         $message = ""; 
         $id = $args['id'];   
         
-        $user = $this->entityManager->find(User::class, $id);
-        $result = $user->toArray();
-
-        if ($user !== null) {
-            $this->entityManager->remove($user);
+        $userObj = $this->entityManager->find(User::class, $id);
+        $user = [];
+        
+        if (!is_null($userObj)) {
+            $user = $userObj->toArray();
+            $this->entityManager->remove($userObj);
             $this->entityManager->flush();
             $message = "Usuário com id={$id} excluído com sucesso!";
         } else {
             $message = "User {$id} não existe."; 
         }
 
-        return $this->ok($response, $message, $result);
+        return $this->ok($response, $message, $user);
     }
 
     public function teste(Request $request, Response $response): Response 
