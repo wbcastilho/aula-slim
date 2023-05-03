@@ -38,6 +38,7 @@ $dotenv->load(__DIR__.'/../.env');
 
 // Crie o contêiner PHP-DI
 $containerBuilder = new ContainerBuilder();
+
 $containerBuilder->addDefinitions([
     Connection::class => function () {
         $connectionParams = [
@@ -51,21 +52,23 @@ $containerBuilder->addDefinitions([
         ];
         return DriverManager::getConnection($connectionParams);
     },
-    EntityManager::class => fn() => EntityManager::create(
-        [
-            'driver' => $_ENV['DB_DRIVER'],
-            'host' => $_ENV['DB_HOST'],
-            'port' => $_ENV['DB_PORT'],
-            'dbname' => $_ENV['DB_DATABASE'],
-            'user' => $_ENV['DB_USERNAME'],
-            'password' => $_ENV['DB_PASSWORD'],
-            'charset' => $_ENV['DB_CHARSET']
-        ],
-        ORMSetup::createAnnotationMetadataConfiguration(
-            paths: array(__DIR__."/app/entity"),
-            isDevMode: true,
-        )
-    )    
+    EntityManager::class => function() {
+        return EntityManager::create(
+            [
+                'driver' => $_ENV['DB_DRIVER'],
+                'host' => $_ENV['DB_HOST'],
+                'port' => $_ENV['DB_PORT'],
+                'dbname' => $_ENV['DB_DATABASE'],
+                'user' => $_ENV['DB_USERNAME'],
+                'password' => $_ENV['DB_PASSWORD'],
+                'charset' => $_ENV['DB_CHARSET']
+            ],
+            ORMSetup::createAnnotationMetadataConfiguration(
+                paths: array(__DIR__."/app/entity"),
+                isDevMode: true,
+            )
+        ); 
+    }       
 ]);
 
 // Construa o contêiner
