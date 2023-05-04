@@ -6,9 +6,9 @@ use Symfony\Component\Dotenv\Dotenv;
 use DI\Container;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
 require __DIR__ . '/../vendor/autoload.php';
