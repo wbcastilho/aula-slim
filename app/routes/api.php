@@ -5,6 +5,7 @@ namespace app\routes;
 use app\controllers\HomeController;
 use app\controllers\OrmController;
 use app\controllers\DbalController;
+use app\controllers\TesteController;
 
 // Rota default
 $app->get('/', [HomeController::class, 'index']);

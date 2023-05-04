@@ -17,43 +17,13 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = new Dotenv();
 $dotenv->load(__DIR__.'/../.env');
 
-// Crie o contêiner PHP-DI
+// Crie o contêiner PHP-DI 
 $containerBuilder = new ContainerBuilder();
 
-// Definições das classes que será adicionadas no container builder
-$containerBuilder->addDefinitions([
-    Connection::class => function () {
-        $connectionParams = [
-            'driver' => $_ENV['DB_DRIVER'],
-            'host' => $_ENV['DB_HOST'],
-            'port' => $_ENV['DB_PORT'],
-            'dbname' => $_ENV['DB_DATABASE'],
-            'user' => $_ENV['DB_USERNAME'],
-            'password' => $_ENV['DB_PASSWORD'],
-            'charset' => $_ENV['DB_CHARSET']
-        ];
-        return DriverManager::getConnection($connectionParams);
-    },
-    EntityManager::class => function() {
-        return EntityManager::create(
-            [
-                'driver' => $_ENV['DB_DRIVER'],
-                'host' => $_ENV['DB_HOST'],
-                'port' => $_ENV['DB_PORT'],
-                'dbname' => $_ENV['DB_DATABASE'],
-                'user' => $_ENV['DB_USERNAME'],
-                'password' => $_ENV['DB_PASSWORD'],
-                'charset' => $_ENV['DB_CHARSET']
-            ],
-            ORMSetup::createAnnotationMetadataConfiguration(
-                paths: array(__DIR__."/app/entity"),
-                isDevMode: true,
-            )
-        ); 
-    }       
-]);
+// Definições das classes que serão adicionadas no container builder para a injeção de dependência
+$containerBuilder->addDefinitions(__DIR__ . '/../app/config/definitions.php');
 
-// Construa o contêiner
+// Constroi o contêiner
 $container = $containerBuilder->build();
 
 // Set container to create App with on AppFactory
