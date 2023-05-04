@@ -11,6 +11,14 @@ Crud básico utilizando Slim Framework 4 e Doctrine.
 composer install
 ```
 
+### Criar banco de dados e criar a tabelas users
+```
+CREATE TABLE users (
+  id INT PRIMARY KEY,
+  name VARCHAR(255)
+);
+```
+
 ### Configurar arquivo .env
 Renomear o arquivo .env.example para .env e nele colocar as configurações de acesso a sua base de dados.
 ```
