@@ -7,6 +7,8 @@ use app\controllers\OrmController;
 use app\controllers\DbalController;
 use app\controllers\TesteController;
 
+// Abaixo são adicionadas as rotas da api
+
 // Rota default
 $app->get('/', [HomeController::class, 'index']);
 
