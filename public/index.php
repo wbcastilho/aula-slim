@@ -1,7 +1,5 @@
 <?php
 
-namespace public;
-
 use Symfony\Component\Dotenv\Dotenv;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -26,7 +24,7 @@ $containerBuilder->addDefinitions(__DIR__ . '/../app/config/definitions.php');
 // Constroi o contêiner
 $container = $containerBuilder->build();
 
-// Set container to create App with on AppFactory
+// Adiciona o container ao AppFactory
 AppFactory::setContainer($container);
 
 $app = AppFactory::create();
@@ -35,6 +33,7 @@ $app = AppFactory::create();
 $app->addBodyParsingMiddleware();
 
 // Mensagens de erro em modo debug
+// Em produção passe $_ENV['DISPLAY_ERROR_DETAILS'] para false
 $app->addErrorMiddleware(
     $_ENV['DISPLAY_ERROR_DETAILS'],
     $_ENV['LOG_ERRORS'],

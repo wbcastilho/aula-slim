@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 abstract class BaseController 
 {
-    protected function base(Response $response, bool $success, string $message, $value)
+    protected function base(Response $response, bool $success, string $message, $value): Response
     {
         $result = [
             'success' => $success,
@@ -19,18 +19,18 @@ abstract class BaseController
         return $response->withHeader('Content-type', 'application/json');  
     }
 
-    protected function ok(Response $response, string $message, $value)
+    protected function ok(Response $response, string $message, $value): Response
     {
         return $this->base($response, true, $message, $value); 
     }
 
-    protected function created(Response $response, string $message, $value)
+    protected function created(Response $response, string $message, $value): Response
     {               
         $response = $this->base($response, true, $message, $value); 
         return $response->withStatus(201); 
     }
 
-    protected function badRequest(Response $response, string $message, $value)
+    protected function badRequest(Response $response, string $message, $value): Response
     {               
         $response = $this->base($response, false, $message, $value); 
         return $response->withStatus(400); 

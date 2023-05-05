@@ -16,7 +16,7 @@ class DbalController extends BaseController
         $this->user = $user;
     }
 
-    public function index(Request $request, Response $response, $args)
+    public function index(Request $request, Response $response, array $args): Response
     {                
         $listUser = $this->user->findAll();
 

@@ -45,7 +45,7 @@ class User
         return $user;
     }
 
-    public function save($name)
+    public function save(string $name): void
     {
         // Retorna um objeto QueryBuilder, que possui métodos para adicionar partes a uma instrução SQL
         $queryBuilder = $this->db->createQueryBuilder();
@@ -60,7 +60,7 @@ class User
         $queryBuilder->execute();     
     }
 
-    public function update(int $id, $name)
+    public function update(int $id, string $name): void
     {
         // Retorna um objeto QueryBuilder, que possui métodos para adicionar partes a uma instrução SQL
         $queryBuilder = $this->db->createQueryBuilder();
@@ -77,7 +77,7 @@ class User
         $queryBuilder->execute();     
     }
 
-    public function delete($id)
+    public function delete(int $id): void
     {
         // Retorna um objeto QueryBuilder, que possui métodos para adicionar partes a uma instrução SQL
         $queryBuilder = $this->db->createQueryBuilder();
