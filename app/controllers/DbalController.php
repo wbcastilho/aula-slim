@@ -9,7 +9,7 @@ use app\models\User;
 
 class DbalController extends BaseController
 {
-    private $user;
+    private User $user;
 
     public function __construct(User $user)
     {
